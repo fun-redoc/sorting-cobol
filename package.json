@@ -1,0 +1,35 @@
+{
+  "name": "quicksort",
+  "dependencies": {
+    "gulp-util": "^3.0.8",
+    "https": "^1.0.0",
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "upload:cobol:quicksrt": "zowe zos-files upload file-to-data-set \"./src/QUICKSRT.cbl\" \"Z85565.CBL(QUICKSRT)\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "upload:cobol:bubletst": "zowe zos-files upload file-to-data-set \"./src/BUBLETST.cbl\" \"Z85565.CBL(BUBLETST)\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "upload:jcl": "zowe zos-files upload file-to-data-set \"./src/RSH0003J.jcl\" \"Z85565.JCL(RSH0003J)\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "run:job:alloutindir": "zowe jobs submit lf \"./src/RSH0003J.jcl\" --directory \"./output\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "run:job:alloutjson": "zowe jobs submit lf \"./src/RSH0003J.jcl\" --vasc --wfo --rfj --directory \"./output\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "run:job": "zowe jobs submit lf \"./src/RSH0003J.jcl\" --wfo --directory \"./output\" --zosmf-p LearnCobol -u Z85565 --pw ZCOBOL",
+    "build+test": "npm run upload:cobol:quicksrt && npm run upload:cobol:bubletst && npm run run:job",
+    "start:with:params": "nodemon -e cbl,jcl --watch src -x \"npm run build+test \"",
+    "start": "nodemon -e cbl,jcl --watch src -x \"echo $2 \""
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "watch": [
+      "src"
+    ],
+    "ignore": [
+      "Z85565"
+    ],
+    "delay": "0",
+    "events": {
+      "restart": "echo \"restart\""
+    }
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
